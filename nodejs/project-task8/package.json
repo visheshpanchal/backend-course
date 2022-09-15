@@ -1,0 +1,16 @@
+{
+  "name": "project-task8",
+  "version": "1.0.0",
+  "description": "Nodejs simple http server project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server":"nodemon app.js"
+  },
+  "author": "Vishesh Panchal",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
