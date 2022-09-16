@@ -17,9 +17,7 @@ let requestHandler = (req, res) => {
         res.write("</div>");
       }
     }
-    res.write(
-      '<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>'
-    );
+    res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>');
 
     res.write("</html>");
     return res.end();
@@ -32,7 +30,7 @@ let requestHandler = (req, res) => {
     });
     return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString();
-      const message = parsedBody.split("=")[1];
+      const message = parsedBody.split("=")[0];
       fs.appendFile("./message.txt", "\n" + message, (err) => {
         res.statusCode = 302;
         res.setHeader("Location", "/");
