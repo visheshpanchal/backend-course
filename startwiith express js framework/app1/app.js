@@ -1,21 +1,25 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use("/", (req, res, next) => {
-  console.log("This is always work");
-  next();
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use("/add-product", (req, res, next) => {
+  res.send(
+    '<form action="/product" method="POST"><input type="text" name="title" placeholder="name"><input type="text" placeholder="size" name="size"><button type="submit">Add Product</button></form>'
+  );
 });
 
-app.use("/app-listen", (req, res, next) => {
-  console.log("Calling App Listen ");
-  res.send("<h1>Hello, from app-listen</h1>");
+app.post("/product", (req, res, next) => {
+  console.log(req.body);
+  res.redirect("/");
 });
 
 app.use("/", (req, res, next) => {
-  res.send("<h1>Hello World</h1>");
+  res.send("<h1>Hello from Express!</h1>");
 });
 
 app.listen(3000, () => {
-  console.log(`Listening From 3000 Post `);
+  console.log("Listening From 3000");
 });
