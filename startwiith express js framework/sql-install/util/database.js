@@ -6,8 +6,9 @@ dotenv.config();
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  database: "ng",
-  password: process.env["MS_PASSWORD"],
+  database: "nd",
+  password: "1234567890",
+  namedPlaceholders: true,
 });
 
 module.exports = pool.promise();
