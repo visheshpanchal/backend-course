@@ -1,0 +1,15 @@
+h2{
+    display: flex;
+    justify-content: center;
+}
+
+form{
+   
+    display: flex;
+    justify-content: center;
+}
+
+form * {
+    margin: 2px;
+}
+
