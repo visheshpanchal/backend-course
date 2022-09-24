@@ -2,13 +2,24 @@
     text-align: center;
     
     font-family: "Metal Mania";
+
+    font-size: xx-large;
+    
    
 }
-
+#about p {
+    font-size: 17px;
+    
+    margin: 20px;
+    margin-top: 35px;
+    color: #777;
+}
 #about img {
     float: left;
     margin: 20px 50px;
     border-radius: 50%;
     width: 200px;
-    height: 200px;
+    height: 200px;      
 }
+
+

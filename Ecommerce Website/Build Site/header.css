@@ -24,13 +24,24 @@ header ul li a {
 header {
     background-color: rgb(70, 70, 70);
     width: 100%;
+  
 }
 
 header h1 {
-    height: 64px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
     color:  white;
 }
 
+footer .footer-title {
+    padding: 60px;
+    text-align: center;
+    background-color: rgb(70, 70, 70);
+    font-size: xx-large;
+    font-weight :bold;
+    color: white;
+    position: relative;
+    top: 120px;
+}
