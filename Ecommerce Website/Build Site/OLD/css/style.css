@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/* body{
+    height:100vh;
+} */
+
+/* Home Page */
+#tours .tour-item{
+    display:flex;
+    border-bottom:1px solid black;
+    padding:10px;
+}
+#tours .tour-item .tour-date{
+    width:12%;
+}
+#tours .tour-item .tour-place{
+    width:25%;
+    color:#777;
+}
+#tours .tour-item .tour-spec-place{
+    width:53%;
+    color:#777;
+}
+#tours .tour-item .buy-btn{
+    width:20%;
+    background: #56CCF2;
+    color:white;
+    border:none;
+    padding:7px;
+    border-radius:5px;
+    font-weight:700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+/* About */
+#about{
+    max-width:900px;
+    margin:0 auto;
+    font-size: 22px;
+}
+#about h3{
+    text-align: center;
+    font-size:25px;
+    margin:20px;
+}
+#about div{
+    /* display:flex; */
+}
+
+#about img{
+    float:left;
+    margin:20px 50px;
+    border-radius: 50%;
+    width:200px;
+    height:200px;
+}
+
+#about p{
+    font-size:17px;
+    margin:20px;
+    color:#777;
+}
+
+#container{
+    position:fixed;
+    bottom:10px;
+    right:10px;
+}
+.notification {
+    background-color: #56CCF2;
+    border-radius: 5px;
+    color: black;
+    padding: 2rem;
+    margin: 1rem;
+}
+
+.notification h4 span{
+    color:rgb(235, 33, 33);
+}
+
+.image-container{
+    height: 250px;
+    width: 250px;
+    overflow: hidden;
+}
+.prod-images{
+    transform-origin: center center;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    padding:0px;
+    margin:0px;
+    transition: ease-in 0.5s;
+    filter: brightness(100%);
+}
+.prod-images:hover{
+    transform: scale(1.5);
+    filter: brightness(130%);
+}
+
+.fa-shopping-cart{
+    color:white;
+}

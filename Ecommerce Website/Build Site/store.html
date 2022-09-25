@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <!-- NavBar -->
+    <nav class="navbar navbar-expand-lg bg-dt">
+      <div class="container-fluid">
+        <ul class="navbar-nav me-auto ms-auto nav-margin">
+          <li class="nav-item">
+            <a
+              class="nav-link active text-light fs-5"
+              aria-current="page"
+              href="./index.html"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light fs-5" href="#">Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light fs-5" href="./about.html">About</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <button
+              class="nav-link text-light fs-5 bg-dark"
+              onclick="showCart(this)"
+            >
+              Cart
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header-main d-flex justify-content-center">
+      <h1 class="fs-1">The Generics</h1>
+    </div>
+    <!-- Section -->
+    <section>
+      <div class="container d-flex justify-content-center mt-3">
+        <h2>Music</h2>
+      </div>
+      <!-- Container Start -->
+      <div class="container">
+        <!-- Row Start -->
+        <div class="row space-item">
+          <div class="col col-6" id="album1">
+            <div class="card" style="width: 18rem">
+              <h3 class="card-title">Album 1</h3>
+              <img src="./img/Album 1.png" class="card-img-top" alt="..." />
+              <div class="card-body">
+                <div class="d-flex justify-content-around">
+                  <p>
+                    <span>$<span id="item-price">12.99</span></span>
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="addItem(this)"
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-6" id="album2">
+            <div class="card" style="width: 18rem">
+              <h3 class="card-title">Album 2</h3>
+              <img src="./img/Album 2.png" class="card-img-top" alt="..." />
+              <div class="card-body">
+                <div class="d-flex justify-content-around">
+                  <p>
+                    <span>$<span id="item-price">12.99</span></span>
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="addItem(this)"
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-6" id="album3">
+            <div class="card" style="width: 18rem">
+              <h3 class="card-title">Album 3</h3>
+              <img src="./img/Album 3.png" class="card-img-top" alt="..." />
+              <div class="card-body">
+                <div class="d-flex justify-content-around">
+                  <p>
+                    <span>$<span id="item-price">12.99</span></span>
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="addItem(this)"
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col6" id="album4">
+            <div class="col col-6 card" style="width: 18rem">
+              <h3 class="card-title">Album 4</h3>
+              <img src="./img/Album 4.png" class="card-img-top" alt="..." />
+              <div class="card-body">
+                <div class="d-flex justify-content-around">
+                  <p>
+                    <span>₹<span id="item-price">12.99</span></span>
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="addItem(this)"
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Container End -->
+      </div>
+      <!-- Container End -->
+    </section>
+
+    <!-- Cart -->
+
+    <div class="cart-position d-none" id="cart">
+      <div class="card" style="width: 35rem; height: auto">
+        <div class="fs-1 d-flex justify-content-center">
+          Cart
+          <div>
+            <button
+              class="fs-5 position-absolute end-0 btn btn-primary"
+              onclick="closeCart(this)"
+            >
+              x
+            </button>
+          </div>
+        </div>
+        <div class="card-body" id="cart-body">
+          <div class="cart-header d-flex justify-content-center">
+            <div class="card-title">ITEM</div>
+            <div class="card-title">PRICE</div>
+            <div class="card-title">QUANTITY</div>
+          </div>
+
+          <div class="cart-details d-flex justify-content-end" id="cart-add">
+            <div>Total :</div>
+            <div>
+              <span>₹<span id="cart-sub-total">00.00</span></span>
+            </div>
+          </div>
+          <div class="cart-purchase">
+            <button class="btn btn-primary">Purchase Symbol</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+
+    <footer
+      class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
+      style="background-color: black"
+    >
+      <div class="col-md-4 d-flex align-items-center">
+        <a
+          href="/"
+          class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1"
+        >
+          <svg class="bi" width="30" height="24">
+            <use xlink:href="#bootstrap"></use>
+          </svg>
+        </a>
+        <span class="text-light">© 2022 The Generics</span>
+      </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="./main.js"></script>
+  </body>
+</html>
