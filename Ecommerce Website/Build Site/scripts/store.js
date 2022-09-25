@@ -1,4 +1,3 @@
-let element = document.getElementById("add-live-item");
 let api = "http://localhost:3000/";
 console.log("hello");
 let getAllItem = async function () {
@@ -15,6 +14,7 @@ let getAllItem = async function () {
       let img = data[item].image;
       let price = data[item].price;
       let id = data[item].id;
+      let cat = data[item].category;
 
       let structure = `
         <div class="card" style="width: 18rem">
@@ -36,12 +36,38 @@ let getAllItem = async function () {
           </div>
         </div>`;
 
-      let createNewElement = document.createElement("div");
-      createNewElement.innerHTML = structure;
-      createNewElement.setAttribute("class", "col col-6");
-      createNewElement.setAttribute("id", `${name}_${id}`);
+      let checkIfCatExistOrNot = document.querySelector(`#${cat}`);
 
-      element.appendChild(createNewElement);
+      // We Check if category exits or not
+      if (checkIfCatExistOrNot) {
+        let element = document.querySelector(`#${cat} #add-live-item`);
+
+        let createNewElement = document.createElement("div");
+        createNewElement.innerHTML = structure;
+        createNewElement.setAttribute("class", "col col-6");
+        createNewElement.setAttribute("id", `${name}_${cat}_${id}`);
+        element.appendChild(createNewElement);
+      } else {
+        let category = `<div class="container d-flex justify-content-center mt-3">
+        <h2>${cat.toUpperCase()}</h2></div>
+      <div class="container" id="${cat}">
+        <div class="row space-item" id="add-live-item">
+        </div>
+      </div>`;
+
+        let categoryElement = document.createElement("div");
+        categoryElement.innerHTML = category;
+
+        let section = document.getElementById("section");
+
+        section.appendChild(categoryElement);
+        let element = document.querySelector(`#${cat} #add-live-item`);
+        let createNewElement = document.createElement("div");
+        createNewElement.innerHTML = structure;
+        createNewElement.setAttribute("class", "col col-6");
+        createNewElement.setAttribute("id", `${name}_${cat}_${id}`);
+        element.appendChild(createNewElement);
+      }
     }
   } catch (err) {
     console.log(err);

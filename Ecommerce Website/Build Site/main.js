@@ -77,6 +77,22 @@ function addItem(e) {
       subTotal.innerHTML = Number(temp).toFixed(2);
     }
   }
+
+  // Toast Notification
+
+  const container = document.getElementById("toast-container");
+
+  createNotification();
+
+  function createNotification() {
+    const toast = document.createElement("div");
+    toast.setAttribute("class", "toast show mt-3 mb-3");
+    toast.innerHTML = `<div class="toast-body ">${name} added in cart</div>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
 }
 
 // Removing Item
