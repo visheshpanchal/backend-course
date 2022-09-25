@@ -59,10 +59,10 @@
       <!-- Container Start -->
       <div class="container">
         <!-- Row Start -->
-        <div class="row space-item">
+        <div class="row space-item" id="add-live-item">
           <div class="col col-6" id="album1">
             <div class="card" style="width: 18rem">
-              <h3 class="card-title">Album 1</h3>
+              <h3 class="d-flex justify-content-center">Album 1</h3>
               <img src="./img/Album 1.png" class="card-img-top" alt="..." />
               <div class="card-body">
                 <div class="d-flex justify-content-around">
@@ -80,7 +80,7 @@
               </div>
             </div>
           </div>
-          <div class="col col-6" id="album2">
+          <!--<div class="col col-6" id="album2">
             <div class="card" style="width: 18rem">
               <h3 class="card-title">Album 2</h3>
               <img src="./img/Album 2.png" class="card-img-top" alt="..." />
@@ -139,7 +139,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <!-- Container End -->
       </div>
@@ -175,7 +175,7 @@
             </div>
           </div>
           <div class="cart-purchase">
-            <button class="btn btn-primary">Purchase Symbol</button>
+            <button class="btn btn-primary">Purchase</button>
           </div>
         </div>
       </div>
@@ -201,6 +201,8 @@
     </footer>
 
     <!-- Script -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./main.js"></script>
+    <script src="./scripts/store.js"></script>
   </body>
 </html>

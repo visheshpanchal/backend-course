@@ -88,7 +88,6 @@ function removeItem(e) {
     `#cart-body #${id} #cart-quantity`
   ).innerHTML;
   let price = document.querySelector(`#${id} #item-price`).innerHTML;
-  console.log(quantity, price);
 
   let totalPrice = Number(price) * Number(quantity);
 
