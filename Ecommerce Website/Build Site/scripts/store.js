@@ -1,10 +1,16 @@
+let PAGE = 1;
+
 let getAllItem = async function () {
   try {
     let res = await axios({
       method: "get",
-      url: api,
+      url: api + "?page=" + PAGE,
     });
 
+    let itemCount = res.headers["pagination_count"];
+    let page = Math.floor(Number(itemCount) / 2) + 1;
+    let section = document.getElementById("section");
+    section.innerHTML = "";
     let data = res.data;
 
     for (let item = 0; item < data.length; item++) {
@@ -56,8 +62,6 @@ let getAllItem = async function () {
         let categoryElement = document.createElement("div");
         categoryElement.innerHTML = category;
 
-        let section = document.getElementById("section");
-
         section.appendChild(categoryElement);
         let element = document.querySelector(`#${cat} #add-live-item`);
         let createNewElement = document.createElement("div");
@@ -67,11 +71,56 @@ let getAllItem = async function () {
         element.appendChild(createNewElement);
       }
     }
+
+    let pagination = document.createElement("nav");
+    pagination.setAttribute("class", "d-flex justify-content-center mt-5");
+
+    let htmlList = "";
+    for (let count = 0; count < page; count++) {
+      htmlList += `<li class="page-item"><button class="page-link" id="page-${
+        count + 1
+      }" onclick="changePage(${count + 1})">${count + 1}</button></li>`;
+    }
+
+    pagination.innerHTML =
+      '<ul class="pagination"> <li class="page-item"><button class="page-link" id="page-prev" onclick="prevPage()">Previous</button></li>' +
+      htmlList +
+      '<li class="page-item"><button class="page-link" id="page-next" onclick="nextPage()">Next</button></li></ul>';
+
+    section.appendChild(pagination);
+    document.getElementById(`page-${PAGE}`).classList.add("active");
+
+    if (PAGE === page) {
+      document.getElementById("page-next").classList.add("disabled");
+    }
+
+    if (PAGE === 1) {
+      document.getElementById("page-prev").classList.add("disabled");
+    }
   } catch (err) {
     console.log(err);
   }
 };
 
+function changePage(e) {
+  let value = e;
+
+  PAGE = value;
+  console.log(value);
+
+  getAllItem();
+}
+
+function nextPage() {
+  PAGE++;
+  getAllItem();
+}
+
+function prevPage() {
+  document.getElementById("section").innerHTML = "";
+  PAGE--;
+  getAllItem();
+}
 window.addEventListener("DOMContentLoaded", function () {
   getAllItem();
 });
