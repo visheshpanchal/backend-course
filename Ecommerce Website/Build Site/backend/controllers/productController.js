@@ -1,7 +1,8 @@
-const db = require("../models/products");
+const sequelize = require("../utils/database");
 
+const Product = sequelize.models.product;
 exports.getAllProduct = (req, res, next) => {
-  db.findAll()
+  Product.findAll()
     .then((data) => {
       res.json(data);
     })

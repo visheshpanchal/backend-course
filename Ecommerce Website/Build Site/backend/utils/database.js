@@ -1,8 +1,24 @@
 const Sequelize = require("sequelize");
 
-const db = new Sequelize("nd", "root", "1234567890", {
+const sequelize = new Sequelize("nd", "root", "1234567890", {
   dialect: "mysql",
   host: "localhost",
 });
 
-module.exports = db;
+// Getting All model
+const modelDefiner = [require("../models/cart"), require("../models/products")];
+
+for (let arr of modelDefiner) {
+  arr(sequelize);
+}
+
+// Adding Relationship
+function oneToOne(first, second) {
+  second.hasOne(first, {
+    onDelete: "CASCADE",
+  });
+  first.belongsTo(second);
+}
+
+oneToOne(sequelize.models.cart, sequelize.models.product);
+module.exports = sequelize;

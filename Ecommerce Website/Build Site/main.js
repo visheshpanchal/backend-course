@@ -18,7 +18,7 @@ function addItem(e) {
   let name = document.querySelector(`#${id} div h3`).innerText;
   let img = document.querySelector(`#${id} div img`).src;
   let price = document.querySelector(`#${id} #item-price`).innerHTML;
-
+  id = id.split("_").at(-1);
   let cartItem = `
   <div class="card-title">
     <img
@@ -33,23 +33,47 @@ function addItem(e) {
   <div>${name}</div>
   <div class="card-title">
     <p>
-      <span>₹<span>${price}</span></span>
+      <span>₹<span id="item-price">${price}</span></span>
     </p>
   </div>
   <div class="card-title" id="cart-quantity">1</div>
   <div class="card-title"><button onclick="removeItem(this)" class="btn btn-primary" style="padding:4px">Remove</button></div>`;
-  // If Cart has already item or not
 
-  let cartItm = document.querySelector(`#cart-body #${id}`);
+  // Update or Submit Object for backend
+  obj = {};
+  obj["name"] = name;
+  obj["image"] = img;
+  obj["price"] = price;
+  obj["quantity"] = 1;
+  obj["productId"] = id;
+
+  // If Cart has already item or not
+  let cartItm = document.querySelector(`#cart-body #${name}_${id}`);
   let subTotal = document.querySelector("#cart-body #cart-sub-total");
 
   if (cartItm !== null) {
+    // Update In UI
     let number = document.querySelector(
-      `#cart-body #${id} #cart-quantity`
+      `#cart-body #${name}_${id} #cart-quantity`
     ).innerHTML;
 
-    document.querySelector(`#cart-body #${id} #cart-quantity`).innerHTML =
-      Number(number) + 1;
+    document.querySelector(
+      `#cart-body #${name}_${id} #cart-quantity`
+    ).innerHTML = Number(number) + 1;
+
+    // Update in Backend
+    number = document.querySelector(
+      `#cart-body #${name}_${id} #cart-quantity`
+    ).innerHTML;
+    console.log(id);
+    obj["quantity"] = number;
+    axios({ method: "put", url: api + "cart/" + id, data: obj })
+      .then(function (res) {
+        createNotification();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
     // Adjusting Cart Total
     let temp = parseFloat(subTotal.innerHTML);
@@ -64,7 +88,7 @@ function addItem(e) {
       "class",
       "cart-items d-flex justify-content-center "
     );
-    domElement.setAttribute("id", `${id}`);
+    domElement.setAttribute("id", `${name}_${id}`);
     domElement.innerHTML = cartItem;
 
     cart.insertBefore(domElement, add);
@@ -77,13 +101,6 @@ function addItem(e) {
       temp += parseFloat(Number(price));
       subTotal.innerHTML = Number(temp).toFixed(2);
     }
-
-    //Submitting Data to Backend
-    obj = {};
-    obj["name"] = name;
-    obj["image"] = img;
-    obj["price"] = price;
-    obj["quantity"] = 1;
 
     axios({ method: "post", url: api + "cart/", data: obj })
       .then(function (res) {
@@ -117,6 +134,7 @@ function removeItem(e) {
   let quantity = document.querySelector(
     `#cart-body #${id} #cart-quantity`
   ).innerHTML;
+  console.log(id);
   let price = document.querySelector(`#${id} #item-price`).innerHTML;
 
   let totalPrice = Number(price) * Number(quantity);
@@ -126,5 +144,70 @@ function removeItem(e) {
     (Number(subTotal.innerHTML) - totalPrice).toFixed(2)
   );
 
-  element.remove();
+  id = id.split("_").at(-1);
+  axios({ method: "DELETE", url: api + "cart/" + id })
+    .then((res) => {
+      element.remove();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
+
+// Load Cart From Backend
+async function loadCart() {
+  try {
+    let res = await axios({ method: "get", url: api + "cart/" });
+    let data = res.data;
+    let total = 0.0;
+    for (let i = 0; i < data.length; i++) {
+      let name = data[i].name;
+      let price = data[i].price;
+      let img = data[i].image;
+      let quantity = data[i].quantity;
+      let id = data[i].productId;
+
+      let cartItem = `<div class="card-title">
+      <img
+        src="${img}"
+        height="100"
+        width="100"
+        class="card-img-top"
+        alt="..."
+      />
+     
+    </div>
+    <div>${name}</div>
+    <div class="card-title">
+      <p>
+        <span>₹<span id="item-price">${price}</span></span>
+      </p>
+    </div>
+    <div class="card-title" id="cart-quantity">${quantity}</div>
+    <div class="card-title"><button onclick="removeItem(this)" class="btn btn-primary" style="padding:4px">Remove</button></div>`;
+      let add = document.querySelector("#cart-body #cart-add");
+
+      let cart = document.querySelector("#cart-body");
+      let domElement = document.createElement("div");
+      domElement.setAttribute(
+        "class",
+        "cart-items d-flex justify-content-center "
+      );
+      domElement.setAttribute("id", `${name}_${id}`);
+      domElement.innerHTML = cartItem;
+
+      cart.insertBefore(domElement, add);
+
+      // Sub total
+
+      total += parseFloat(Number(price)) * Number(quantity);
+    }
+
+    let subTotal = document.querySelector("#cart-body #cart-sub-total");
+    subTotal.innerHTML = Number(total).toFixed(2);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", loadCart);

@@ -1,4 +1,3 @@
-console.log("hello");
 let getAllItem = async function () {
   try {
     let res = await axios({
@@ -7,7 +6,7 @@ let getAllItem = async function () {
     });
 
     let data = res.data;
-    console.log(data);
+
     for (let item = 0; item < data.length; item++) {
       let name = data[item].name;
       let img = data[item].image;
