@@ -1,5 +1,6 @@
-let cart = document.getElementById("cart");
+let api = "http://localhost:3000/";
 
+let cart = document.getElementById("cart");
 // Cart Displaying
 function showCart(e) {
   cart.classList.remove("d-none");
@@ -76,13 +77,26 @@ function addItem(e) {
       temp += parseFloat(Number(price));
       subTotal.innerHTML = Number(temp).toFixed(2);
     }
+
+    //Submitting Data to Backend
+    obj = {};
+    obj["name"] = name;
+    obj["image"] = img;
+    obj["price"] = price;
+    obj["quantity"] = 1;
+
+    axios({ method: "post", url: api + "cart/", data: obj })
+      .then(function (res) {
+        createNotification();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
 
   // Toast Notification
 
   const container = document.getElementById("toast-container");
-
-  createNotification();
 
   function createNotification() {
     const toast = document.createElement("div");

@@ -1,4 +1,3 @@
-let api = "http://localhost:3000/";
 console.log("hello");
 let getAllItem = async function () {
   try {
