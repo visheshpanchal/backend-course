@@ -27,10 +27,10 @@ let getAllItem = async function () {
           <div class="card-body">
             <div class="d-flex justify-content-around">
               <p>
-                <span>$<span id="item-price">${price}</span></span>
+                <span class="fs-4">₹<span id="item-price" class="fs-4">${price}</span></span>
               </p>
               <button
-                class="btn btn-primary"
+                class="btn btn-primary p-3"
                 type="button"
                 onclick="addItem(this)"
               >
@@ -98,7 +98,11 @@ let getAllItem = async function () {
       document.getElementById("page-prev").classList.add("disabled");
     }
   } catch (err) {
-    console.log(err);
+    let section = document.getElementById("section");
+
+    section.innerHTML = `<div class="d-flex justify-content-center alert alert-danger mt-3" mb-3 role="alert">
+    ${err.code}
+  </div>`;
   }
 };
 
