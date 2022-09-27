@@ -8,7 +8,10 @@ let getAllItem = async function () {
     });
 
     let itemCount = res.headers["pagination_count"];
-    let page = Math.floor(Number(itemCount) / 2) + 1;
+    let page = Math.floor(Number(itemCount) / 2);
+    if (itemCount % 2 !== 0) {
+      page++;
+    }
     let section = document.getElementById("section");
     section.innerHTML = "";
     let data = res.data;

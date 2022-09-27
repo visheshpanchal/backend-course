@@ -11,11 +11,6 @@
 .nav-margin *{
     margin: 2px 29px;;
 }
-.header-main {
-    background-color: rgb(66, 63, 63);
-    padding: 50px;
-    color: white;
-}
 
 .cart-header{
     top:5px;
@@ -55,6 +50,7 @@
     display: flex;
     justify-content: end;
     margin-top: 15px;
+    z-index: -1;
 }
 
 .cart-position {
@@ -68,7 +64,30 @@
     font-size: large;
     padding: 0 5px;
 }
+/* Style Home Page Table */
+.table-block {
+    border-bottom: 2px solid black;
+}
 
-.form-width {
-    width: 30%;
+
+.table-block * {
+    margin: 5px 0px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.table-block button {
+    padding: 5px;
+    background-color: azure;
+}
+
+.table-block button:hover {
+    background-color: rgb(188, 145, 51);
+}
+
+.toast-notification {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
 }

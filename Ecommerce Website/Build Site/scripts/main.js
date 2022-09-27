@@ -161,11 +161,11 @@ async function loadCart() {
     let data = res.data;
     let total = 0.0;
     for (let i = 0; i < data.length; i++) {
-      let name = data[i].name;
-      let price = data[i].price;
-      let img = data[i].image;
+      let name = data[i].product.name;
+      let price = data[i].product.price;
+      let img = data[i].product.image;
       let quantity = data[i].quantity;
-      let id = data[i].productId;
+      let id = data[i].product.id;
 
       let cartItem = `<div class="card-title">
       <img

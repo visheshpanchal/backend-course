@@ -1,22 +1,18 @@
 const { DataTypes } = require("sequelize");
 
-const User = (sequelize) => {
+const orderItems = (sequelize) => {
   return sequelize.define(
-    "user",
+    "orderitems",
     {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
+        allowNull: false,
         primaryKey: true,
-        allowNull: false,
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      quantity: {
+        type: DataTypes.INTEGER,
+        default: 0,
       },
     },
     {
@@ -25,4 +21,4 @@ const User = (sequelize) => {
   );
 };
 
-module.exports = User;
+module.exports = orderItems;

@@ -3,6 +3,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize("nd", "root", "1234567890", {
   dialect: "mysql",
   host: "localhost",
+  logging: false,
 });
 
 // Getting All model
@@ -11,6 +12,7 @@ const modelDefiner = [
   require("../models/products"),
   require("../models/user"),
   require("../models/order"),
+  require("../models/orderItems"),
 ];
 
 for (let arr of modelDefiner) {
@@ -25,13 +27,24 @@ function oneToOne(first, second) {
   first.belongsTo(second);
 }
 
+const User = sequelize.models.user;
+const Order = sequelize.models.order;
+const Product = sequelize.models.product;
 oneToOne(sequelize.models.cart, sequelize.models.product);
 
-sequelize.models.user.belongsToMany(sequelize.models.product, {
-  through: "order",
+// One to Many Between User and Order
+User.hasMany(Order, {
+  onDelete: "CASCADE",
 });
-sequelize.models.product.belongsToMany(sequelize.models.user, {
-  through: "order",
+Order.belongsTo(User);
+
+// Many to Many Between Order and Product with Quantity
+Order.belongsToMany(Product, {
+  through: "orderitems",
+});
+Product.belongsToMany(Order, {
+  through: "orderitems",
+  onDelete: "CASCADE",
 });
 
 module.exports = sequelize;

@@ -10,19 +10,6 @@ const Cart = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-
-      image: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
