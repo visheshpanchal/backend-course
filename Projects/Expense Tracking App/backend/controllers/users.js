@@ -10,7 +10,14 @@ exports.addUser = async (req, res, next) => {
 
       res.status(201).json({ Object });
     } catch (err) {
-      console.log(err);
+      if (err.errors[0].message) {
+        console.log(err.errors[0].message);
+        res
+          .status(400)
+          .json({ status: "error", message: `${err.errors[0].message}` });
+      } else {
+        console.log(err.errors);
+      }
     }
   } else {
     res.json({ Status: "error" });
