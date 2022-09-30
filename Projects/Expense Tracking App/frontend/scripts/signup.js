@@ -1,5 +1,3 @@
-let api = "http://127.0.0.1:3000/user/";
-
 const signUpForm = document.getElementById("signup-form");
 
 signUpForm.addEventListener("submit", function (event) {
@@ -14,9 +12,10 @@ signUpForm.addEventListener("submit", function (event) {
 
   data["password"] = password.value;
 
-  axios({ method: "post", url: api + "signup", data: data })
+  axios({ method: "post", url: api + "user/" + "signup", data: data })
     .then(function (res) {
-      alert(`${res.data.message}`);
+      console.log(res.data);
+      alert("SignUp Successfully Done ...");
     })
     .catch(function (err) {
       alert(`${err.response.data.message}`);

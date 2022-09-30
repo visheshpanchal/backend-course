@@ -1,5 +1,7 @@
 const sequelize = require("../utils/database");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const User = sequelize.models.user;
 
 // GENERAL CONFIG
@@ -60,6 +62,13 @@ exports.loginUser = async (req, res, next) => {
             res.status(500).json({});
           }
           if (result) {
+            // JWT WebToken Adding
+            let jwtString = jwt.sign(
+              { userId: _Object.id, name: _Object.name },
+              "gO950trcsHUegzks2eSOt9mQirgix2sgYV1pCMefNLq8S1nzVO4m61eLjI5QIN3V"
+            );
+            res.set({ "Access-Control-Expose-Headers": "token" });
+            res.set("token", jwtString);
             res
               .status(200) // 200 Successful Request
               .json({ status: "success", user: { name: _Object.name } });

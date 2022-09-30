@@ -56,9 +56,9 @@ async function storage(urlLink) {
         let oneRow = `<tr><td>${jsonData[i]["amount"]}</td>
         <td>${jsonData[i]["description"]}</td>
         <td>${category.options[jsonData[i]["category"]].value}</td>`;
-        oneRow += `<td><button id="deleteItem" onclick="deleteData(this)" name="${jsonData[i]["_id"]}">Delete</button></td>`;
+        oneRow += `<td><button class="btn btn-danger" id="deleteItem" onclick="deleteData(this)" name="${jsonData[i]["_id"]}">Delete</button></td>`;
 
-        oneRow += `<td><button id="editItem" onclick="editData(this)" name="${jsonData[i]["_id"]}">Edit</button></td></tr>`;
+        oneRow += `<td><button class="btn btn-primary" id="editItem" onclick="editData(this)" name="${jsonData[i]["_id"]}">Edit</button></td></tr>`;
         rows += oneRow;
       }
 

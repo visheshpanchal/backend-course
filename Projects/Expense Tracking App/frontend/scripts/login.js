@@ -1,5 +1,3 @@
-let api = "http://127.0.0.1:3000/user/";
-
 const loginForm = document.getElementById("login-form");
 
 loginForm.addEventListener("submit", function (event) {
@@ -11,9 +9,12 @@ loginForm.addEventListener("submit", function (event) {
   data["password"] = password.value;
   data["email"] = email.value;
 
-  axios({ method: "post", url: api + "login", data: data })
+  axios({ method: "post", url: api + "user/" + "login", data: data })
     .then(function (res) {
       if (res.status === 200) {
+        let jsonToken = res.headers.token;
+        console.log(res.headers.token);
+        localStorage.setItem("token", JSON.stringify(jsonToken));
         alert(`${res.data.user.name} successfully logged in ...`);
         window.location = "./expense.html";
       } else {

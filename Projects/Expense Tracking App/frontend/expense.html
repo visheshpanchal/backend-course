@@ -13,7 +13,42 @@
     <title>Expense Tracking</title>
   </head>
   <body>
-    <section>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- Navbar Toggler when we reduce size-->
+        <button
+          class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar Toggler when we reduce size end-->
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <!-- Nav Link -->
+
+              <button class="btn text-light bg-dark fs-4 mt-auto">
+                Logout
+              </button>
+            </li>
+            <li class="nav-item">
+              <!-- Nav Link -->
+              <button class="btn btn-dark text-light bg-dark fs-4 mt-auto">
+                Profile
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <section class="mt-5">
       <div class="container-fluid d-flex justify-content-center">
         <form id="my-form">
           <div class="d-inline p-3">
@@ -36,9 +71,15 @@
         </form>
       </div>
 
-      <table id="my-table"></table>
+      <div class="container">
+        <table
+          id="my-table"
+          class="table table-sm table-bordered table-hover table-striped border-dark mt-5"
+        ></table>
+      </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./scripts/global.js"></script>
     <script src="./scripts/expense.js"></script>
   </body>
 </html>

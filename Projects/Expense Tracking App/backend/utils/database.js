@@ -12,4 +12,14 @@ for (const db of dbs) {
   db(sequelize);
 }
 
+const User = sequelize.models.user;
+const Expense = sequelize.models.expense;
+
+// User to Expense (One to Many Relation Ship)
+User.hasMany(Expense, {
+  onDelete: "CASCADE",
+});
+
+Expense.belongsTo(User);
+
 module.exports = sequelize;
