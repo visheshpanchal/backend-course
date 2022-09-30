@@ -16,7 +16,7 @@ signUpForm.addEventListener("submit", function (event) {
 
   axios({ method: "post", url: api + "signup", data: data })
     .then(function (res) {
-      console.log("Successfully ");
+      alert("Successfully Signup");
     })
     .catch(function (err) {
       console.log(err);
