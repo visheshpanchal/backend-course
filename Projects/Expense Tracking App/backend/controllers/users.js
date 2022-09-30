@@ -23,3 +23,35 @@ exports.addUser = async (req, res, next) => {
     res.json({ Status: "error" });
   }
 };
+
+exports.loginUser = async (req, res, next) => {
+  let body = req.body;
+  console.log(body);
+  if (body) {
+    try {
+      let _Object = await User.findOne({
+        where: {
+          email: body.email,
+        },
+      });
+
+      if (_Object) {
+        if (_Object.password === body.password) {
+          res
+            .status(200) // 200 Successful Request
+            .json({ status: "success", user: { name: _Object.name } });
+        } else {
+          res
+            .status(401) // Error for password not match
+            .json({ status: "error", message: "Password not matching" });
+        }
+      } else {
+        // 404 error for record not found
+        res.status(404).json({ status: "error", message: "User Not Found." });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+  }
+};

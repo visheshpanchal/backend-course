@@ -1,8 +1,8 @@
-let api = "http://127.0.0.1:3000/user/signup";
+let api = "http://127.0.0.1:3000/user/";
 
-const form = document.getElementById("sign-up-form");
+const signUpForm = document.getElementById("signup-form");
 
-form.addEventListener("submit", function (event) {
+signUpForm.addEventListener("submit", function (event) {
   event.preventDefault();
   let name = document.getElementById("name-signup");
   let email = document.getElementById("email-signup");
@@ -14,7 +14,7 @@ form.addEventListener("submit", function (event) {
 
   data["password"] = password.value;
 
-  axios({ method: "post", url: api, data: data })
+  axios({ method: "post", url: api + "signup", data: data })
     .then(function (res) {
       console.log("Successfully ");
     })

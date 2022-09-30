@@ -41,10 +41,8 @@ Order.belongsTo(User);
 // Many to Many Between Order and Product with Quantity
 Order.belongsToMany(Product, {
   through: "orderitems",
-});
-Product.belongsToMany(Order, {
-  through: "orderitems",
   onDelete: "CASCADE",
 });
+
 
 module.exports = sequelize;
