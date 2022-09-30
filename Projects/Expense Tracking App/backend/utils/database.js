@@ -6,7 +6,7 @@ const sequelize = new Sequelize("expense_tracking", "root", "1234567890", {
 });
 
 // Add All Database here
-const dbs = [require("../models/users")];
+const dbs = [require("../models/userModel"), require("../models/expenseModel")];
 
 for (const db of dbs) {
   db(sequelize);

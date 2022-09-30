@@ -5,36 +5,36 @@ const User = sequelize.models.user;
 // GENERAL CONFIG
 const SALT_ROUND = 10;
 
-exports.addUser = async (req, res, next) => {
+exports.singUpUser = (req, res, next) => {
   let body = req.body;
   let name = body.name;
   let email = body.email;
   let password = body.password;
-
+  // Validation Not Completed Yet
   if (body) {
-    try {
-      bcrypt.hash(password, SALT_ROUND, async (err, result) => {
-        if (err) {
-          res.status(500).json({});
-        }
-
-        let Object = await User.create({
+    bcrypt.hash(password, SALT_ROUND, async (err, result) => {
+      if (err) {
+        res.status(500).json({});
+      }
+      try {
+        let _Object = await User.create({
           name: name,
           email: email,
           password: result,
         });
-        res.status(201).json({ Object });
-      });
-    } catch (err) {
-      if (err.errors[0].message) {
-        console.log(err.errors[0].message);
         res
-          .status(400)
-          .json({ status: "error", message: `${err.errors[0].message}` });
-      } else {
-        console.log(err.errors);
+          .status(201)
+          .json({ status: "success", message: { id: _Object.id } });
+      } catch (err) {
+        if (err.errors[0].message) {
+          res
+            .status(400)
+            .json({ status: "error", message: `${err.errors[0].message}` });
+        } else {
+          res.status(400).json({ status: "error", message: `${err}` });
+        }
       }
-    }
+    });
   } else {
     res.json({ Status: "error" });
   }
@@ -43,6 +43,7 @@ exports.addUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   let body = req.body;
   let plainPassword = body.password;
+  // Validation Not Completed Yet
   console.log(body);
   if (body) {
     try {

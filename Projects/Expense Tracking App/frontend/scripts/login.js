@@ -15,6 +15,7 @@ loginForm.addEventListener("submit", function (event) {
     .then(function (res) {
       if (res.status === 200) {
         alert(`${res.data.user.name} successfully logged in ...`);
+        window.location = "./expense.html";
       } else {
         alert(`User not found`);
       }

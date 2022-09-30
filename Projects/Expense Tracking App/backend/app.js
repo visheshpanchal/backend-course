@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Registering Routers
 
-const routes = [require("./routes/user")];
+const routes = [require("./routes/user"), require("./routes/expenseRoute")];
 
 for (const route of routes) {
   app.use(route);
