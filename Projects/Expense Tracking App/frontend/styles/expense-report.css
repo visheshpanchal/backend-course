@@ -1,0 +1,14 @@
+.table-style thead tr * {
+    text-align: center;
+    font-size: large;
+  
+}
+
+.table-style tbody tr * {
+    text-align: center;
+    font-weight: bold;
+}
+
+.options-month {
+    width: auto;
+}
