@@ -1,7 +1,8 @@
 let getForm = document.getElementById("my-form");
 let urlLink = "http://localhost:3000/expense/";
 let btn = getForm.lastElementChild;
-
+let PAGE = 1;
+let LIMIT = 10;
 getForm.addEventListener("submit", store);
 
 // Store Item
@@ -15,34 +16,39 @@ function store(e) {
   let catValue = category.selectedIndex;
 
   let attr = btn.getAttribute("name");
-  console.log(attr);
+
   if (attr !== "add" && attr !== undefined) {
     let link = urlLink + attr;
     let obj = {};
     obj["amount"] = amount;
     obj["description"] = description;
-    obj["category"] = catValue;
+    obj["category"] = category.options[catValue].value;
     putDataOnCloud(link, obj);
   } else {
     let obj = {};
     obj["amount"] = amount;
     obj["description"] = description;
-    obj["category"] = catValue;
+    obj["category"] = category.options[catValue].value;
     postDataOnCloud(urlLink, obj);
   }
 }
 
 // Displaying Stored Item
 let table = document.getElementById("my-table");
+let pageObject = document.getElementById("pagination");
+async function storage() {
+  table.innerHTML = "";
+  pageObject.innerHTML = "";
 
-async function storage(urlLink) {
   try {
     let res = await axios({
       method: "get",
-      url: urlLink,
+      url: urlLink + `?page=${PAGE}&&limit=${LIMIT}`,
     });
+    let count = res.data.totalItems;
+    let totalPageNo = Math.ceil(count / LIMIT);
+    let jsonData = res.data.data;
 
-    let jsonData = res.data;
     if (jsonData.length > 0) {
       let tableHead = document.createElement("thead");
       tableHead.innerHTML = ` <th>Amount</th> <th>Description</th> <th>Category</th> <th> Delete </th> <th> Edit </th>`;
@@ -50,12 +56,12 @@ async function storage(urlLink) {
 
       let tableBody = document.createElement("tbody");
 
-      let category = document.getElementById("category");
       let rows = "";
       for (let i = 0; i < jsonData.length; i++) {
+        let category = jsonData[i]["category"].category;
         let oneRow = `<tr><td>${jsonData[i]["amount"]}</td>
         <td>${jsonData[i]["description"]}</td>
-        <td>${category.options[jsonData[i]["category"]].value}</td>`;
+        <td>${category[0].toUpperCase() + category.substr(1)}</td>`;
         oneRow += `<td><button class="btn btn-danger" id="deleteItem" onclick="deleteData(this)" name="${jsonData[i]["_id"]}">Delete</button></td>`;
 
         oneRow += `<td><button class="btn btn-primary" id="editItem" onclick="editData(this)" name="${jsonData[i]["_id"]}">Edit</button></td></tr>`;
@@ -64,6 +70,38 @@ async function storage(urlLink) {
 
       tableBody.innerHTML = "<tbody>" + rows + "</tbody>";
       table.appendChild(tableBody);
+      // Pagination
+
+      let pageNavbar = document.createElement("nav");
+
+      let totalPage = "";
+      for (let i = 0; i < totalPageNo; i++) {
+        let activePage = i + 1 == PAGE ? "active" : "";
+
+        let pageNumber = ` <li class="page-item ${activePage}">
+        <button class="page-link" onclick="pageChange(this)">${i + 1}</button>
+      </li>`;
+        totalPage += pageNumber;
+      }
+      let disabledNextPage = PAGE === totalPageNo ? "disabled" : "";
+      let disabledPreviousPage = PAGE === 1 ? "disabled" : "";
+      let pagination = `
+      <ul class="pagination">
+        <li class="page-item ${disabledPreviousPage}">
+          <button class="page-link "  aria-label="Previous" onclick="previousPage(this)">
+            <span aria-hidden="true" >&laquo;</span>
+          </button>
+        </li>
+       
+        ${totalPage}
+        <li class="page-item ${disabledNextPage}">
+          <button class="page-link "  aria-label="Next" onclick="nextPage(this)">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      </ul>`;
+      pageNavbar.innerHTML = pagination;
+      pageObject.appendChild(pageNavbar);
     } else {
       table.style.display = "none";
     }
@@ -73,9 +111,31 @@ async function storage(urlLink) {
 }
 // After DOM Loaded we fetch data from crud crud
 window.addEventListener("DOMContentLoaded", (event) => {
-  storage(urlLink);
+  storage();
 });
 
+// Some Pagination Methods and Limit Methods
+function pageChange(e) {
+  let value = Number(e.innerText);
+  PAGE = value;
+  storage();
+}
+
+function changeLimit(e) {
+  let value = Number(e.value);
+  PAGE = 1;
+  LIMIT = value;
+  storage();
+}
+
+function nextPage(e) {
+  PAGE++;
+  storage();
+}
+function previousPage(e) {
+  PAGE--;
+  storage();
+}
 // Delete Item By Click
 async function deleteData(ele) {
   let number = ele.name;
@@ -124,6 +184,13 @@ async function editData(ele) {
     amount.value = data["amount"];
     description.value = data["description"];
     category.selectedIndex = data["category"];
+    categoryIndex = data["categoryId"];
+    for (const option of category.options) {
+      if (option.value === categoryIndex.toString()) {
+        category.selectedIndex = option.index;
+        break;
+      }
+    }
 
     btn.setAttribute("name", number);
     btn.textContent = "Update";
@@ -141,3 +208,24 @@ async function putDataOnCloud(urlLink, _data) {
     console.log(err);
   }
 }
+
+// Getting All Categories
+
+window.addEventListener("DOMContentLoaded", async function (event) {
+  let category = document.getElementById("category");
+
+  try {
+    let response = await axios({ method: "get", url: api + "category" });
+    let data = response.data.data;
+
+    for (const item of data) {
+      let option = document.createElement("option");
+      option.setAttribute("value", item.id);
+      option.innerText =
+        item.category[0].toUpperCase() + item.category.substr(1);
+      category.appendChild(option);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});

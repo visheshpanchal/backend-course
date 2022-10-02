@@ -1,25 +1,79 @@
 const sequelize = require("../utils/database");
 
 const Expense = sequelize.models.expense;
+const Category = sequelize.models.category;
 const jwt = require("jsonwebtoken");
 
-const SECRETE_KEY =
-  "gO950trcsHUegzks2eSOt9mQirgix2sgYV1pCMefNLq8S1nzVO4m61eLjI5QIN3V";
+const SECRETE_KEY = process.env.SECRETE_KEY;
 
 exports.getExpenses = async (req, res, next) => {
-  try {
-    let token = req.headers.token;
-    if (token) {
-      let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
-      let data = await Expense.findAll({
+  let token = req.headers.token;
+  let page = req.query.page;
+  console.log(req.query.limit);
+  let limit = req.query.limit ? Number(req.query.limit) : 10;
+  if (token) {
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
+    if (page) {
+      let count = await Expense.count({
         where: { userId: decryptedToken.userId },
       });
-      res.json(data);
+
+      let data = await Expense.findAll({
+        offset: (page - 1) * limit,
+        limit: limit,
+        where: { userId: decryptedToken.userId },
+        include: {
+          model: Category,
+        },
+      });
+
+      res
+        .status(200)
+        .json({ status: "success", data: data, totalItems: count });
     } else {
-      res.status(404).json({ status: "error", message: "User Not Found" });
+      try {
+        let data = await Expense.findAll({
+          where: { userId: decryptedToken.userId },
+          include: {
+            model: Category,
+          },
+        });
+        res.json({ status: "success", data: data });
+      } catch (err) {
+        console.log(err);
+      }
     }
-  } catch (err) {
-    console.log(err);
+  } else {
+    res.status(404).json({ status: "error", message: "User Not Found" });
+  }
+};
+
+exports.getExpensesByMonth = async (req, res, next) => {
+  let token = req.headers.token;
+  let month = req.params.month;
+
+  if (token) {
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
+    try {
+      let data = await Expense.findAll({
+        where: {
+          userId: decryptedToken.userId,
+          createdAt: sequelize.where(
+            sequelize.fn("month", sequelize.col("createdAt")),
+            month
+          ),
+        },
+        include: {
+          model: Category,
+        },
+      });
+
+      res.json(data);
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(404).json({ status: "error", message: "User Not Found" });
   }
 };
 
@@ -42,8 +96,11 @@ exports.postExpenses = async (req, res, next) => {
     try {
       let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
       let body = req.body;
+      let categoryId = body.category;
+      let cat;
       let data = await Expense.create({
         ...body,
+        categoryId: categoryId,
         userId: decryptedToken.userId,
       });
       res.status(201).json(data._id);
@@ -58,9 +115,11 @@ exports.postExpenses = async (req, res, next) => {
 exports.updateExpense = async (req, res, next) => {
   try {
     let body = req.body;
+    let categoryId = body.category;
     let id = req.params.id;
+    console.log(body);
     let data = await Expense.update(
-      { ...body },
+      { ...body, categoryId: categoryId },
       {
         where: {
           _id: id,

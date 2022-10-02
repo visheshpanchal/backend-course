@@ -61,21 +61,31 @@
           </div>
           <div class="d-inline p-3">
             <label for="">Category</label>
-            <select name="category" id="category">
-              <option value="oil">Oil</option>
-              <option value="grocery">Grocery</option>
-              <option value="food">Food</option>
-            </select>
+            <select name="category" id="category"></select>
           </div>
           <button type="submit" name="add">Add</button>
         </form>
       </div>
-
+      <div class="container d-flex justify-content-end">
+        <select
+          name=""
+          id="page-limit"
+          class="p-2 mt-2"
+          onchange="changeLimit(this)"
+        >
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">50</option>
+          <option value="50">100</option>
+        </select>
+      </div>
       <div class="container">
         <table
           id="my-table"
-          class="table table-sm table-bordered table-hover table-striped border-dark mt-5"
+          class="table table-sm table-bordered table-hover table-striped border-dark mt-3"
         ></table>
+        <div class="d-flex justify-content-center" id="pagination"></div>
       </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
