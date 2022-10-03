@@ -8,7 +8,7 @@ async function fetchData(month) {
       url: api + "expense/month/" + month,
     });
 
-    let data = response.data;
+    let data = response.data.data;
     console.log(data);
     let dt = "";
     let incomeAmount = 0;
@@ -19,8 +19,9 @@ async function fetchData(month) {
       let amount = category !== "income" ? d.amount : "-";
       incomeAmount += category === "income" ? d.amount : 0;
       expenseAmount += category !== "income" ? d.amount : 0;
+
       let structure = `  <tr>
-        <td>30-06-2000</td>
+        <td>${d.createdAt.split("T")[0]}</td>
 
         <td>${d.description}</td>
 
@@ -87,4 +88,9 @@ async function fetchData(month) {
 function generateExpenseReport(e) {
   console.log(e.value);
   fetchData(e.value);
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location = "./login.html";
 }

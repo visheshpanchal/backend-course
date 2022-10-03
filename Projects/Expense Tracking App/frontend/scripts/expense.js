@@ -36,6 +36,7 @@ function store(e) {
 // Displaying Stored Item
 let table = document.getElementById("my-table");
 let pageObject = document.getElementById("pagination");
+let premiumUser = document.getElementById("premium-user");
 async function storage() {
   table.innerHTML = "";
   pageObject.innerHTML = "";
@@ -104,6 +105,10 @@ async function storage() {
       pageObject.appendChild(pageNavbar);
     } else {
       table.style.display = "none";
+    }
+    console.log(res.data);
+    if (res.data.premium === 1) {
+      premiumUser.innerHTML = `<a href="./expense-report.html" class="btn text-light bg-dark fs-4 mt-auto">Generate Report</a>`;
     }
   } catch (e) {
     console.log(e);
@@ -229,3 +234,9 @@ window.addEventListener("DOMContentLoaded", async function (event) {
     console.log(error);
   }
 });
+
+// Logout
+function logout() {
+  localStorage.removeItem("token");
+  window.location = "./login.html";
+}

@@ -2,9 +2,28 @@ const sequelize = require("../utils/database");
 
 const Expense = sequelize.models.expense;
 const Category = sequelize.models.category;
+const Order = sequelize.models.order;
 const jwt = require("jsonwebtoken");
 
-const SECRETE_KEY = process.env.SECRETE_KEY;
+const SECRET_KEY = process.env.SECRETE_KEY;
+
+async function checkPremiumUser(req) {
+  let token = req.headers.token;
+  let isPremium = 0;
+  if (token) {
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
+    try {
+      let res = await Order.count({ where: { userId: decryptedToken.userId } });
+      if (res > 0) {
+        isPremium = 1;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return isPremium;
+}
 
 exports.getExpenses = async (req, res, next) => {
   let token = req.headers.token;
@@ -12,7 +31,7 @@ exports.getExpenses = async (req, res, next) => {
   console.log(req.query.limit);
   let limit = req.query.limit ? Number(req.query.limit) : 10;
   if (token) {
-    let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
     if (page) {
       let count = await Expense.count({
         where: { userId: decryptedToken.userId },
@@ -27,9 +46,12 @@ exports.getExpenses = async (req, res, next) => {
         },
       });
 
-      res
-        .status(200)
-        .json({ status: "success", data: data, totalItems: count });
+      res.status(200).json({
+        status: "success",
+        data: data,
+        totalItems: count,
+        premium: await checkPremiumUser(req),
+      });
     } else {
       try {
         let data = await Expense.findAll({
@@ -38,7 +60,11 @@ exports.getExpenses = async (req, res, next) => {
             model: Category,
           },
         });
-        res.json({ status: "success", data: data });
+        res.json({
+          status: "success",
+          data: data,
+          premium: await checkPremiumUser(req),
+        });
       } catch (err) {
         console.log(err);
       }
@@ -53,7 +79,7 @@ exports.getExpensesByMonth = async (req, res, next) => {
   let month = req.params.month;
 
   if (token) {
-    let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
     try {
       let data = await Expense.findAll({
         where: {
@@ -68,7 +94,7 @@ exports.getExpensesByMonth = async (req, res, next) => {
         },
       });
 
-      res.json(data);
+      res.json({ data: data, premium: await checkPremiumUser(req) });
     } catch (err) {
       console.log(err);
     }
@@ -85,7 +111,7 @@ exports.getSingleExpense = async (req, res, next) => {
         _id: id,
       },
     });
-    res.status(200).json(data);
+    res.status(200).json({ data: data, premium: await checkPremiumUser(req) });
   } catch (err) {}
 };
 
@@ -94,7 +120,7 @@ exports.postExpenses = async (req, res, next) => {
 
   if (token) {
     try {
-      let decryptedToken = jwt.decode(JSON.parse(token), SECRETE_KEY);
+      let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
       let body = req.body;
       let categoryId = body.category;
       let cat;

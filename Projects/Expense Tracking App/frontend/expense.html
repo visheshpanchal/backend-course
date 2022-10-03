@@ -34,15 +34,21 @@
             <li class="nav-item">
               <!-- Nav Link -->
 
-              <button class="btn text-light bg-dark fs-4 mt-auto">
+              <button
+                class="btn text-light bg-dark fs-4 mt-auto"
+                onclick="logout()"
+              >
                 Logout
               </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="premium-user">
               <!-- Nav Link -->
-              <button class="btn btn-dark text-light bg-dark fs-4 mt-auto">
-                Profile
-              </button>
+              <a
+                class="btn btn-dark text-light bg-dark fs-4 mt-auto"
+                href="./payment.html"
+              >
+                <img src="./imgs/icons8-premium-32.png" alt="" /> Go Premium
+              </a>
             </li>
           </ul>
         </div>

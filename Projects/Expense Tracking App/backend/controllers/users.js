@@ -1,8 +1,17 @@
 const sequelize = require("../utils/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 const User = sequelize.models.user;
+const Order = sequelize.models.order;
+
+const SECRET_KEY = process.env.SECRET_KEY;
+const R_SECRET = process.env.RAZORPAY_SECRET;
+let razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY, // your `KEY_ID`
+  key_secret: process.env.RAZORPAY_SECRET, // your `KEY_SECRET`
+});
 
 // GENERAL CONFIG
 const SALT_ROUND = 10;
@@ -56,7 +65,7 @@ exports.loginUser = async (req, res, next) => {
       });
 
       if (_Object) {
-        bcrypt.compare(plainPassword, _Object.password, (err, result) => {
+        bcrypt.compare(plainPassword, _Object.password, async (err, result) => {
           if (err) {
             console.log(err);
             res.status(500).json({});
@@ -65,8 +74,9 @@ exports.loginUser = async (req, res, next) => {
             // JWT WebToken Adding
             let jwtString = jwt.sign(
               { userId: _Object.id, name: _Object.name },
-              "gO950trcsHUegzks2eSOt9mQirgix2sgYV1pCMefNLq8S1nzVO4m61eLjI5QIN3V"
+              SECRET_KEY
             );
+
             res.set({ "Access-Control-Expose-Headers": "token" });
             res.set("token", jwtString);
             res
@@ -86,5 +96,64 @@ exports.loginUser = async (req, res, next) => {
       console.log(err);
     }
   } else {
+  }
+};
+
+exports.goPremium = async (req, res, next) => {
+  let token = req.headers.token;
+
+  if (token) {
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
+    console.log(decryptedToken);
+    try {
+      let response = await razorpay.orders.create({
+        // prettier-ignore
+
+        amount: 500,
+
+        currency: "INR",
+        receipt: "Receipt #20",
+      });
+      try {
+        let userResponse = await Order.create({
+          orderId: response.id,
+          userId: decryptedToken.userId,
+        });
+
+        res.status(201).json({ status: "success", data: userResponse });
+      } catch (error) {
+        console.log(error, "122");
+      }
+    } catch (error) {
+      console.log(error, "125");
+    }
+  } else {
+    res.status(404).json({ status: "error", message: "User not found." });
+  }
+};
+
+exports.verifyTransaction = async (req, res, next) => {
+  let body = req.body;
+  let token = req.headers.token;
+  if (body) {
+    let decryptedToken = jwt.decode(JSON.parse(token), SECRET_KEY);
+    let id = body.razorpay_order_id + "|" + body.razorpay_payment_id;
+    let expectedSignature = crypto
+      .createHmac("sha256", R_SECRET)
+      .update(id.toString())
+      .digest("hex");
+
+    if (expectedSignature === body.razorpay_signature) {
+      let order = await Order.update(
+        { paymentId: body.razorpay_payment_id },
+        { where: { userId: decryptedToken.userId } }
+      );
+
+      res.json({ status: "success" });
+    } else {
+      res.json({ status: "error" });
+    }
+  } else {
+    console.log("Payment Part");
   }
 };
