@@ -34,7 +34,7 @@ exports.signup = (req, res, next) => {
   if (token) {
     // 409 Conflict
     res
-      .stats(409)
+      .status(409)
       .json({ status: "error", message: "User is already registered." });
   } else {
     let body = req.body;
@@ -51,15 +51,15 @@ exports.signup = (req, res, next) => {
               user: { id: object.id, name: object.name },
             });
           } catch (error) {
-            console.log(error, result);
-            res.json({ status: "error", message: "Internal Server Error" });
+            res.json({ status: "error", message: error.errors[0].message });
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.errors[0].message);
+          res.json({ status: "error", message: error.errors[0].message });
         });
     } else {
-      res.stats(200).json({ status: "error", message: "Missing in Content" });
+      res.status(200).json({ status: "error", message: "Missing in Content" });
     }
   }
 };
@@ -70,7 +70,7 @@ exports.login = async (req, res, next) => {
 
   if (token) {
     res
-      .stats(409)
+      .status(409)
       .json({ status: "error", message: "User is already registered." });
   } else {
     let body = req.body;
@@ -98,17 +98,19 @@ exports.login = async (req, res, next) => {
                 .json({ status: "success", message: "User Logged in ..." });
             } else {
               res
-                .status(200)
+                .status(401) // Password is not correct
                 .json({ status: "error", message: "Password is not matching" });
             }
           });
+        } else {
+          res.status(404).json({ status: "error", message: "User not found" });
         }
       } catch (err) {
         console.log("Error in Fetching User");
       }
     } else {
       // If body han't all fields
-      res.stats(200).json({ status: "error", message: "Missing in Content" });
+      res.status(200).json({ status: "error", message: "Missing in Content" });
     }
   }
 };
