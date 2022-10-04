@@ -4,4 +4,5 @@ const router = express.Router();
 
 router.post("/message", messageController.storeMessage);
 
+router.get("/message", messageController.getAllMessages);
 module.exports = router;
