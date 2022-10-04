@@ -25,48 +25,45 @@ window.addEventListener("DOMContentLoaded", refreshPage);
 let i = 0;
 
 async function getAllMessages(event) {
-  let res = await axios({ method: "get", url: api + "message?" + "skip=" + i });
+  try {
+    let res = await axios({
+      method: "get",
+      url: api + "message?" + "skip=" + i,
+    });
+    let data = res.data.data.message;
 
-  let data = res.data.data.message;
-  let lengthOfMessage = data.length;
-
-  let c = 0;
-  if (i < lengthOfMessage) {
     for (const d of data) {
-      if (c < i) {
-        c++;
+      if (i % 2 === 0) {
+        let structure = `     
+                  <div class="col col-12 p-2">${d.message}</div>
+               `;
+
+        let ele = document.createElement("div");
+        ele.setAttribute("class", "row");
+        ele.innerHTML = structure;
+        chatBox.appendChild(ele);
       } else {
-        if (i % 2 === 0) {
-          let structure = `     
-              <div class="col col-12 p-2">${d.message}</div>
-           `;
+        let structure = `     
+                  <div class="col col-12 text-end p-2">
+                      ${d.message}
+               
+                  </div>
+                `;
 
-          let ele = document.createElement("div");
-          ele.setAttribute("class", "row");
-          ele.innerHTML = structure;
-          chatBox.appendChild(ele);
-        } else {
-          let structure = `     
-              <div class="col col-12 text-end p-2">
-                  ${d.message}
-           
-              </div>
-            `;
-
-          let ele = document.createElement("div");
-          ele.setAttribute("class", "row bg-chat");
-          ele.innerHTML = structure;
-          chatBox.appendChild(ele);
-        }
-        i++;
+        let ele = document.createElement("div");
+        ele.setAttribute("class", "row bg-chat");
+        ele.innerHTML = structure;
+        chatBox.appendChild(ele);
       }
+      i++;
     }
+  } catch (err) {
+    console.log(err);
   }
 }
 
 function refreshPage(event) {
   setInterval(() => {
-    console.log("WOrk");
     getAllMessages(event);
   }, 1000);
 }

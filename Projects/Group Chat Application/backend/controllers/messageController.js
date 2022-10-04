@@ -47,6 +47,8 @@ exports.storeMessage = async (req, res, next) => {
 exports.getAllMessages = async (req, res, next) => {
   let token = req.headers.token;
   let body = req.body;
+  let skip = req.query.skip !== undefined ? req.query.skip : 0;
+  console.log(skip, "------------------ skip");
   if (token !== "") {
     jwt.verify(token, SECRET_KEY, async function (err, decryptToken) {
       if (err) {
@@ -61,6 +63,8 @@ exports.getAllMessages = async (req, res, next) => {
       }
       try {
         let message = await Message.findAll({
+          offset: Number(skip),
+
           where: { userId: decryptToken.userId },
         });
 
@@ -69,6 +73,7 @@ exports.getAllMessages = async (req, res, next) => {
           data: { user: decryptToken.name, message: message },
         });
       } catch (error) {
+        console.log(error);
         res.status(500).json({ status: "error", message: "Server Error" });
       }
     });
