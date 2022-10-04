@@ -8,7 +8,7 @@ const sequelize = new Sequelize("chatapp", "root", "1234567890", {
 });
 
 // Add All Database here
-const models = [require("../models/user")];
+const models = [require("../models/user"), require("../models/message")];
 
 for (const model of models) {
   model(sequelize);
@@ -16,6 +16,12 @@ for (const model of models) {
 
 // All Models
 const User = sequelize.models.user;
+const Message = sequelize.models.message;
 
 // Relationships
+User.hasMany(Message, {
+  onDelete: "CASCADE",
+});
+Message.belongsTo(User);
+
 module.exports = sequelize;

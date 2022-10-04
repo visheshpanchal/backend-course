@@ -19,7 +19,10 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //      Registering Routers
-const routers = [require("./routers/userRouter")];
+const routers = [
+  require("./routers/userRouter"),
+  require("./routers/messageRouter"),
+];
 
 for (const router of routers) {
   app.use(router);
