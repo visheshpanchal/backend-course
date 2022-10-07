@@ -22,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const routers = [
   require("./routers/userRouter"),
   require("./routers/messageRouter"),
+  require("./routers/friendsRouter"),
+  require("./routers/groupRouter"),
 ];
 
 for (const router of routers) {

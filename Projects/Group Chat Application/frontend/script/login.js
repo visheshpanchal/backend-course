@@ -1,5 +1,6 @@
 console.log("Hello");
-
+localStorage.removeItem("chat");
+localStorage.removeItem("messages");
 let myForm = document.getElementById("login-form");
 
 myForm.addEventListener("submit", login);
@@ -25,7 +26,7 @@ async function login(event) {
       localStorage.setItem("token", token);
       alert("Login Done");
 
-      window.location = "./chat.html";
+      window.location = "./friends.html";
     } else {
       alert(res.data.message);
     }

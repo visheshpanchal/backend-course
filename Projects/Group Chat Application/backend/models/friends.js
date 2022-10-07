@@ -1,15 +1,12 @@
 const { DataTypes } = require("sequelize");
 
-const Message = (sequelize) => {
-  return sequelize.define("message", {
+const Friend = (sequelize) => {
+  return sequelize.define("friend", {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-    },
-    message: {
-      type: DataTypes.TEXT,
     },
     toUser: {
       type: DataTypes.INTEGER,
@@ -18,4 +15,4 @@ const Message = (sequelize) => {
   });
 };
 
-module.exports = Message;
+module.exports = Friend;

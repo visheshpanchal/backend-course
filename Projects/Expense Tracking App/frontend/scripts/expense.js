@@ -185,7 +185,8 @@ async function editData(ele) {
   try {
     let getData = await axios({ method: "get", url: _urlLink + number });
 
-    let data = getData.data[0];
+    let data = getData.data.data[0];
+
     amount.value = data["amount"];
     description.value = data["description"];
     category.selectedIndex = data["category"];
